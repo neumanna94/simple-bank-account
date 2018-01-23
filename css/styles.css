@@ -1,3 +1,10 @@
 .jumbotron {
   text-align:center;
 }
+
+#results {
+  display: none;
+}
+#bankAccountAdd {
+  display: none;
+}

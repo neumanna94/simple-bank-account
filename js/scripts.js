@@ -1,7 +1,8 @@
 var allAccounts = [
+  new BankAccount("admin", "admin", 200, 400),
   new BankAccount("Alex", "Alex", 200, 400),
-  new BankAccount("Tim", "Tim", 400, 800),
-  new BankAccount("Sarah", "Sarah", 800, 1600)
+  new BankAccount("John", "John", 200, 400),
+
 ];
 //Bank Account Object Definition
 function BankAccount(nameInput, password, checkingBalanceIn, savingBalanceIn){
@@ -60,9 +61,9 @@ function accountChecker(bankAccount){
   return "Account Successfully Created.";
 }
 function accountAdd(currentAccountIndex,selector, amount){
-  if(selector == 0){
+  if(selector ==1){
     allAccounts[currentAccountIndex].add(0, amount);
-  } else if(selector ==1){
+  } else if(selector ==0){
     allAccounts[currentAccountIndex].add(1, amount);
   }
 }
@@ -86,11 +87,26 @@ function display(){
   $("#bankAccountAdd").toggle();
   $("#bankAccountForm").toggle();
   $("#logIn").toggle();
-  $("results").text("");
+  $("#returnButton").toggle();
+}
+function adminDisplay(){
+  $("#results").toggle();
+  $("#bankAccountForm").toggle();
+  $("#logIn").toggle();
+  $("#returnButton").toggle();
+  $("#admin").toggle();
 }
 function writeAccountInformation(accountSelector){
   $("#results p").text("");
   $("#results p").append(allAccounts[accountSelector].display());
+}
+function writeAccounts(){
+  $("#admin").text("");
+  $("#admin").append("<h3><strong>All Accounts:</strong></h3>");
+  var arrLength = allAccounts.length;
+  for(var i = 1; i < arrLength; i ++){
+    $("#admin").append("<p>" + allAccounts[i].display() + "</p>");
+  }
 }
 //Form Input Selection
 $(document).ready(function(){
@@ -110,9 +126,14 @@ $(document).ready(function(){
     var account = logInFunction(name, password);
     if(!isNaN(account)){
       alert("Log in Successfull!");
-      display();
       currentAccountIndex = account;
-      writeAccountInformation(currentAccountIndex);
+      if(account==0){
+        adminDisplay();
+        writeAccounts();
+      } else {
+        display();
+        writeAccountInformation(currentAccountIndex);
+      }
     } else {
       alert(account);
     }
@@ -127,6 +148,10 @@ $(document).ready(function(){
     accountAdd(currentAccountIndex, accountSelector, depositAmount);
   });
   $("#returnButton").click(function() {
-    display();
+    if(currentAccountIndex == 0){
+      adminDisplay();
+    } else {
+      display();
+    }
   });
 });

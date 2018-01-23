@@ -8,3 +8,11 @@
 #bankAccountAdd {
   display: none;
 }
+
+#admin {
+  display:none;
+}
+
+#returnButton{
+  display:none;
+}

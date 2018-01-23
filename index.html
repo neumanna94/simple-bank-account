@@ -33,13 +33,10 @@
               <label for="user"><strong>Enter Username:</strong></label>
               <input id="user" class="form-control" type="text">
               <label for="password"><strong>Enter Password:</strong></label>
-              <input id="password" class="form-control" type="text">
+              <input id="loginPassword" class="form-control" type="text">
               <button type="submit">Log In</button>
             </div>
           </form>
-          <div id="results">
-            <h3><strong>Your Account Information:</strong></h3>
-          </div>
           <form id = "bankAccountAdd">
             <div class="form-group">
               <h4><strong>Deposit or Withdraw Funds:</strong></h4>
@@ -48,11 +45,15 @@
                 <option value = "0">Checking</option>
                 <option value = "1">Savings</option>
                 <option value = "2">Transfer</option>
-
               </select>
               <label for="depositAmountHTML"><strong>Enter Amount:</strong></label>
               <input id="depositAmountHTML" class="form-control" type="text">
               <button type="submit">Commit</button>
+              <button type="button" id="returnButton">Return</button>
+              <div id="results">
+                <h3><strong>Your Account Information:</strong></h3>
+                <p></p>
+              </div>
             </div>
           </form>
         </div>

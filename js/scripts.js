@@ -1,5 +1,8 @@
-var allAccounts = [];
-
+var allAccounts = [
+  new BankAccount("Alex", "Alex", 200, 400),
+  new BankAccount("Tim", "Tim", 400, 800),
+  new BankAccount("Sarah", "Sarah", 800, 1600)
+];
 //Bank Account Object Definition
 function BankAccount(nameInput, password, checkingBalanceIn, savingBalanceIn){
   this.name = nameInput;
@@ -18,10 +21,28 @@ BankAccount.prototype.add = function(location, amount){
 BankAccount.prototype.simpleInterest = function(amountOfYears){
   this.sBalance = this.sBalance*(1 + (this.sInterest/100)*amountOfYears);
 }
-
-BankAccount.prototype.display = function (){
-  return "Name: " + this.name + "<br>" + "Checking Balance: " + this.cBalance + "<br>" + "Saving Balance: " + this.sBalance + "<br>";
+BankAccount.prototype.display = function() {
+  return "<strong>Name: </strong>" + this.name + "<br>" + "<strong>Checking Balance: </strong>" + this.cBalance + "<br>" + "<strong>Saving Balance: </strong>" + this.sBalance + "<br>" + "<strong> Saving Interest Rate: </strong>" + this.sInterest + "<br>";
 }
+
+function transfer(from, to, amount) {
+  if(from==0 && to==1){
+    if((this.cBalance-amount)< 0){
+      alert("Not enough Balance in Checking Account.");
+    } else {
+      this.add(from, amount*-1);
+      this.add(to, amount);
+    }
+  } else if(from==1&&to==0){
+    if((this.sBalance-amount < 0)){
+      alert("Not enough Balance in Savings Account.")
+    } else {
+      this.add(from, amount*-1);
+      this.add(to, amount);
+    }
+  }
+}
+
 //BankAccount Object Accessor Functions
 function accountChecker(bankAccount){
   if(allAccounts[0] == null){
@@ -38,29 +59,22 @@ function accountChecker(bankAccount){
   allAccounts.push(bankAccount);
   return "Account Successfully Created.";
 }
-
-function accountAdd(selector, amount){
+function accountAdd(currentAccountIndex,selector, amount){
   if(selector == 0){
-    this.add(0, amount);
-
+    allAccounts[currentAccountIndex].add(0, amount);
   } else if(selector ==1){
-    this.add(1, amount);
-  } else {
-
+    allAccounts[currentAccountIndex].add(1, amount);
   }
 }
-
 function logInFunction(name, password){
   var arrLength = allAccounts.length;
   for(var i = 0; i < arrLength; i ++){
+    // debugger;
     var currentAccount = allAccounts[i];
-    if(currentAccount.name == allAccounts[i].name && currentAccount.password == allAccounts[i].password){
-      console.log(i);
+    if((currentAccount.name === name) && (currentAccount.password == password)){
       return i;
-    } else if(currentAccount.name == allAccounts[i].name && currentAccount.password != allAccounts[i].password){
-      console.log(i);
+    } else if((currentAccount.name == name) && currentAccount.password != password){
       return "Sorry " + currentAccount.name + " you entered the wrong password."
-    } else {
     }
   }
     return "No account with that name exists."
@@ -68,38 +82,51 @@ function logInFunction(name, password){
 
 //Display Functions
 function display(){
-  $("#results").prepend("<p>" + this.display() + "</p>");
+  $("#results").toggle();
+  $("#bankAccountAdd").toggle();
+  $("#bankAccountForm").toggle();
+  $("#logIn").toggle();
+  $("results").text("");
 }
-
-
-
-
+function writeAccountInformation(accountSelector){
+  $("#results p").text("");
+  $("#results p").append(allAccounts[accountSelector].display());
+}
 //Form Input Selection
 $(document).ready(function(){
+  var currentAccountIndex;
   $("form#bankAccountForm").submit(function(event) {
     event.preventDefault();
     var name = $("#name").val();
     var password = $("#password").val();
     var iDeposit= parseInt($("#iDeposit").val());
     var newBankAccountObj = new BankAccount(name, password, iDeposit, 0);
-    accountChecker(newBankAccountObj);
+    alert(accountChecker(newBankAccountObj));
     });
   $("form#logIn").submit(function(event){
     event.preventDefault();
     var name = $("#user").val();
-    var password = $("#password").val();
+    var password = $("#loginPassword").val();
     var account = logInFunction(name, password);
-    console.log(allAccounts[account]);
-    if(IsNaN(allAccounts[account]) != true){
-      $("form#bankAccountAdd").submit(function(event) {
-      event.preventDefault();
-      var accountSelector = $("accountSelector").val();
-      var depositAmount = $("depositAmountHTML").val();
-      accountAdd(accountSelector, depositAmount);
+    if(!isNaN(account)){
+      alert("Log in Successfull!");
       display();
-      });
+      currentAccountIndex = account;
+      writeAccountInformation(currentAccountIndex);
     } else {
       alert(account);
     }
+  });
+  $("form#bankAccountAdd").submit(function(event) {
+    event.preventDefault();
+    console.log(currentAccountIndex);
+    var accountSelector = parseInt($("#accountSelector").val());
+    var depositAmount = parseInt($("#depositAmountHTML").val());
+    console.log(accountSelector);
+    console.log(depositAmount);
+    accountAdd(currentAccountIndex, accountSelector, depositAmount);
+  });
+  $("#returnButton").click(function() {
+    display();
   });
 });

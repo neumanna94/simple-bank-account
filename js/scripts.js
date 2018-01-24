@@ -105,9 +105,15 @@ function writeAccounts(){
   $("#admin").append("<h3><strong>All Accounts:</strong></h3>");
   var arrLength = allAccounts.length;
   for(var i = 1; i < arrLength; i ++){
-    $("#admin").append("<p>" + allAccounts[i].display() + "</p>");
+    var j = i-1;
+    $("#admin").append('<div><p>' + allAccounts[i].display() + '<button type="button" class="delete">Delete</button>' + '</p></div>');
+    console.log()
+    $("#admin button").last().click(function(){
+      $(this).parent().hide();
+      allAccounts.splice(j, 1);
+    });
+    };
   }
-}
 //Form Input Selection
 $(document).ready(function(){
   var currentAccountIndex;
